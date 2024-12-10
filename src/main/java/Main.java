@@ -4,6 +4,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Main {
+
+    private final static int CO_RELATION_ID = 7;
+
     public static void main(String[] args){
         ServerSocket serverSocket;
         Socket clientSocket = null;
@@ -20,7 +23,7 @@ public class Main {
             clientSocket = serverSocket.accept();
             writer = new PrintWriter(clientSocket.getOutputStream(), true);
             writer.println("00000004");
-            writer.println("0000000000000007");
+            writer.println(CO_RELATION_ID);
             writer.flush();
             writer.close();
 
