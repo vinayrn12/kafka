@@ -6,7 +6,6 @@ import java.net.Socket;
 public class Main {
 
     private final static Integer CO_RELATION_ID = 7;
-    private final static Integer MESSAGE_SIZE = 1;
 
     public static void main(String[] args){
         ServerSocket serverSocket;
@@ -23,7 +22,7 @@ public class Main {
             // Wait for connection from client.
             clientSocket = serverSocket.accept();
             writer = new PrintWriter(clientSocket.getOutputStream(), true);
-            writer.println(MESSAGE_SIZE);
+            writer.println("00000004");
             writer.println(CO_RELATION_ID);
             writer.flush();
             writer.close();
