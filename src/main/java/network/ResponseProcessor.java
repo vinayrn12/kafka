@@ -12,8 +12,11 @@ public class ResponseProcessor {
     }
 
     public void sendResponse(int correlationId) throws IOException {
-        outputStream.writeInt(4);
+        outputStream.writeInt(6);
+        // Header
         outputStream.writeInt(correlationId);
+        // Body
+        outputStream.writeShort(35); // Error code 35 for now
 
         outputStream.flush();
     }
