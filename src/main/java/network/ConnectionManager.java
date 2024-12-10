@@ -6,7 +6,7 @@ import java.net.Socket;
 
 public class ConnectionManager {
     public void startServer(int port) {
-        ServerSocket serverSocket;
+        ServerSocket serverSocket = null;
         Socket clientSocket = null;
         try {
             serverSocket = new ServerSocket(port);
@@ -18,22 +18,37 @@ public class ConnectionManager {
             // Wait for connection from client.
             clientSocket = serverSocket.accept();
 
-            RequestProcessor requestProcessor = new RequestProcessor();
-            int correlationId = requestProcessor.processRequest(clientSocket);
+            RequestProcessor requestProcessor = new RequestProcessor(clientSocket);
+            int correlationId = requestProcessor.processRequest();
 
-            ResponseProcessor responseProcessor = new ResponseProcessor();
-            responseProcessor.sendResponse(clientSocket, correlationId);
+            ResponseProcessor responseProcessor = new ResponseProcessor(clientSocket);
+            responseProcessor.sendResponse(correlationId);
 
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
         } finally {
-            try {
-                if (clientSocket != null) {
-                    clientSocket.close();
-                }
-            } catch (IOException e) {
-                System.out.println("IOException: " + e.getMessage());
+            closeClientSocket(clientSocket);
+            closeServerSocket(serverSocket);
+        }
+    }
+
+    private void closeClientSocket(Socket clientSocket) {
+        try {
+            if (clientSocket != null) {
+                clientSocket.close();
             }
+        } catch (IOException e) {
+            System.out.println("IOException closing client socket: " + e.getMessage());
+        }
+    }
+
+    private void closeServerSocket(ServerSocket serverSocket) {
+        try {
+            if (serverSocket != null) {
+                serverSocket.close();
+            }
+        } catch (IOException e) {
+            System.out.println("IOException closing server socket: " + e.getMessage());
         }
     }
 }

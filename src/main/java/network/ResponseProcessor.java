@@ -5,13 +5,16 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class ResponseProcessor {
-    public void sendResponse(Socket clientSocket, int correlationId) throws IOException {
-        DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
+    private final DataOutputStream outputStream;
 
+    public ResponseProcessor(Socket clientSocket) throws IOException {
+        this.outputStream = new DataOutputStream(clientSocket.getOutputStream());
+    }
+
+    public void sendResponse(int correlationId) throws IOException {
         outputStream.writeInt(4);
         outputStream.writeInt(correlationId);
 
         outputStream.flush();
-        outputStream.close();
     }
 }
