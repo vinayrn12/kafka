@@ -1,18 +1,17 @@
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Main {
 
-    private static Integer CO_RELATION_ID = 7;
-    private static Integer MESSAGE_SIZE = 1;
+    private final static Integer CO_RELATION_ID = 7;
+    private final static Integer MESSAGE_SIZE = 1;
 
     public static void main(String[] args){
         ServerSocket serverSocket;
         Socket clientSocket = null;
-        PrintWriter writer = null;
+        PrintWriter writer;
         int port = 9092;
         try {
             serverSocket = new ServerSocket(port);
@@ -26,6 +25,7 @@ public class Main {
             writer = new PrintWriter(clientSocket.getOutputStream(), true);
             writer.println(MESSAGE_SIZE);
             writer.println(CO_RELATION_ID);
+            writer.flush();
             writer.close();
 
         } catch (IOException e) {
