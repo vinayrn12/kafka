@@ -1,5 +1,7 @@
 package network;
 
+import model.Request;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -19,10 +21,10 @@ public class ConnectionManager {
             clientSocket = serverSocket.accept();
 
             RequestProcessor requestProcessor = new RequestProcessor(clientSocket);
-            int correlationId = requestProcessor.processRequest();
+            Request request = requestProcessor.processRequest();
 
             ResponseProcessor responseProcessor = new ResponseProcessor(clientSocket);
-            responseProcessor.sendResponse(correlationId);
+            responseProcessor.sendResponse(request);
 
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
