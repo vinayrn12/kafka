@@ -1,5 +1,5 @@
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -10,7 +10,6 @@ public class Main {
     public static void main(String[] args){
         ServerSocket serverSocket;
         Socket clientSocket = null;
-        PrintWriter writer;
         int port = 9092;
         try {
             serverSocket = new ServerSocket(port);
@@ -21,11 +20,14 @@ public class Main {
 
             // Wait for connection from client.
             clientSocket = serverSocket.accept();
-            writer = new PrintWriter(clientSocket.getOutputStream(), true);
-            writer.println("00000004");
-            writer.println(CO_RELATION_ID);
-            writer.flush();
-            writer.close();
+
+            DataOutputStream outputStream = new DataOutputStream(clientSocket.getOutputStream());
+
+            outputStream.writeInt(4);
+            outputStream.writeInt(CO_RELATION_ID);
+
+            outputStream.flush();
+            outputStream.close();
 
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
