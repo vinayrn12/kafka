@@ -14,13 +14,23 @@ public class RequestProcessor {
     }
 
     public Request processRequest() throws IOException {
-        Request request = new Request.Builder()
-                .setSize(this.inputStream.readInt())
-                .setApiKey(this.inputStream.readShort())
-                .setApiVersion(this.inputStream.readShort())
-                .setCorrelationId(this.inputStream.readInt())
-                .build();
+        int size = this.inputStream.readInt();
 
-        return request;
+        short apiKey = this.inputStream.readShort();
+
+        short apiVersion = this.inputStream.readShort();
+
+        int correlationId = this.inputStream.readInt();
+
+        // Consume remaining bytes
+        byte[] remainingBytes = new byte[size - 8];
+        this.inputStream.readFully(remainingBytes);
+
+        return new Request.Builder()
+                .setSize(size)
+                .setApiKey(apiKey)
+                .setApiVersion(apiVersion)
+                .setCorrelationId(correlationId)
+                .build();
     }
 }

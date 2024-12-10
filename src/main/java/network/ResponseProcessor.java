@@ -23,7 +23,7 @@ public class ResponseProcessor {
             List<Response.ApiMetadata> apiMetadataList = new ArrayList<>();
             apiMetadataList.add(new Response.ApiMetadata(
                     request.getApiKey(),  // api_key
-                    (short)3,   // min_version
+                    (short)4,   // min_version
                     (short)4,   // max_version
                     (byte)0     // tagged_fields
             ));
@@ -48,12 +48,12 @@ public class ResponseProcessor {
             byte[] responseBytes = bos.toByteArray();
 
             // Write size and response to the output stream
-            outputStream.write(sizeBytes);
-            outputStream.write(responseBytes);
+            this.outputStream.write(sizeBytes);
+            this.outputStream.write(responseBytes);
         } else {
-            outputStream.writeInt(6);
-            outputStream.writeInt(request.getCorrelationId());
-            outputStream.writeShort(35);
+            this.outputStream.writeInt(6);
+            this.outputStream.writeInt(request.getCorrelationId());
+            this.outputStream.writeShort(35);
         }
     }
 }

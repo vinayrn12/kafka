@@ -12,20 +12,20 @@ public class ConnectionManager {
         Socket clientSocket = null;
         try {
             serverSocket = new ServerSocket(port);
+            serverSocket.setReuseAddress(true); // Handle 'Address already in use' errors
 
-            // Since the tester restarts your program quite often, setting SO_REUSEADDR
-            // ensures that we don't run into 'Address already in use' errors
-            serverSocket.setReuseAddress(true);
-
-            // Wait for connection from client.
+            // Wait for a connection from a client
             clientSocket = serverSocket.accept();
+            System.out.println("Client connected from " + clientSocket.getInetAddress());
 
-            RequestProcessor requestProcessor = new RequestProcessor(clientSocket);
-            Request request = requestProcessor.processRequest();
+            // Handling requests in a loop
+            while (true) {
+                RequestProcessor requestProcessor = new RequestProcessor(clientSocket);
+                Request request = requestProcessor.processRequest();
 
-            ResponseProcessor responseProcessor = new ResponseProcessor(clientSocket);
-            responseProcessor.sendResponse(request);
-
+                ResponseProcessor responseProcessor = new ResponseProcessor(clientSocket);
+                responseProcessor.sendResponse(request);
+            }
         } catch (IOException e) {
             System.out.println("IOException: " + e.getMessage());
         } finally {
