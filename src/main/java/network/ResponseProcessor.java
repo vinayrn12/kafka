@@ -21,11 +21,21 @@ public class ResponseProcessor {
     public void sendResponse(Request request) throws IOException {
         if (request.getApiVersion() == 4) {
             List<Response.ApiMetadata> apiMetadataList = new ArrayList<>();
+
+            // APIVersions API
             apiMetadataList.add(new Response.ApiMetadata(
                     request.getApiKey(),  // api_key
-                    (short)4,   // min_version
+                    (short)0,   // min_version
                     (short)4,   // max_version
                     (byte)0     // tagged_fields
+            ));
+
+            // DescribeTopicPartitions API
+            apiMetadataList.add(new Response.ApiMetadata(
+                    (short) 75,
+                    (short) 0,
+                    (short) 4,
+                    (byte) 0
             ));
 
             // Build the response
